@@ -7,6 +7,12 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "DroidFusion", "DroidFusion.
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Datasetting", "..\Datasetting\Datasetting.pyproj", "{0444C216-3772-473A-8E47-0A7F73F3D579}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D05737E-1036-4D04-9146-4C3DD3437C36}"
+	ProjectSection(SolutionItems) = preProject
+		..\DATASET_S_with_Class.xlsx = ..\DATASET_S_with_Class.xlsx
+		..\List malwares.xlsx = ..\List malwares.xlsx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
