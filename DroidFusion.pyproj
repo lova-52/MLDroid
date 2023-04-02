@@ -26,7 +26,6 @@
     <Compile Include="DroidFusion.py" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="CondaEnv|CondaEnv|env" />
     <InterpreterReference Include="CondaEnv|CondaEnv|TestEnvironment" />
   </ItemGroup>
   <ItemGroup>

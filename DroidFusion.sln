@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.33423.256
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "DroidFusion", "DroidFusion.pyproj", "{786C1014-2041-41AB-B5D6-136864356775}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Datasetting", "..\Datasetting\Datasetting.pyproj", "{0444C216-3772-473A-8E47-0A7F73F3D579}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{786C1014-2041-41AB-B5D6-136864356775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{786C1014-2041-41AB-B5D6-136864356775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0444C216-3772-473A-8E47-0A7F73F3D579}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0444C216-3772-473A-8E47-0A7F73F3D579}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
