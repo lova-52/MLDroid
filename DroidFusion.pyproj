@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>786c1014-2041-41ab-b5d6-136864356775</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>DroidFusion.py</StartupFile>
+    <StartupFile>FR1_SVM.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -24,6 +24,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DroidFusion.py" />
+    <Compile Include="FR1_NB.py" />
+    <Compile Include="FR1_SVM.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|TestEnvironment" />
