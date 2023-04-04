@@ -46,7 +46,7 @@ f_measures = []
 for dataset_file in dataset_files:
 
     # Load dataset
-    data = pd.read_excel(f'D:\\uit\\bao mat web\\project mldroid\\{dataset_file}')
+    data = pd.read_excel(f'D:\\uit\\bao mat web\\project mldroid\\DATASET\\{dataset_file}')
 
     # Perform one-hot encoding on the Package and Category columns
     data = pd.get_dummies(data, columns=['Package', 'Category'])
@@ -58,7 +58,7 @@ for dataset_file in dataset_files:
 
     # Perform feature selection using chi-squared test
     y = data['Class']
-    selector = SelectKBest(chi2, k=100)
+    selector = SelectKBest(chi2, k=50)
     X_new = selector.fit_transform(X, y)
 
     # Train a Naive Bayes classifier using 20-fold cross-validation
@@ -70,7 +70,7 @@ for dataset_file in dataset_files:
 
     # Fit the model on the full dataset and save it
     clf.fit(X_new, y)
-    model_file = f'D:\\uit\\bao mat web\\project mldroid\\{dataset_file.replace(".xlsx", "_FR1_NB_model.joblib")}'
+    model_file = f'D:\\uit\\bao mat web\\project mldroid\\Trained Models\\{dataset_file.replace(".xlsx", "_FR1_NB_model.joblib")}'
     joblib.dump(clf, model_file)
 
     # Make predictions on the full dataset and calculate f1 score
