@@ -46,7 +46,7 @@ f_measures = []
 for dataset_file in dataset_files:
 
     # Load dataset
-    data = pd.read_excel(f'D:\\uit\\bao mat web\\project mldroid\\DATASET\\{dataset_file}')
+    data = pd.read_excel(f'D:\\uit\\bao mat web\\MLDroid\\DATASET\\{dataset_file}')
 
     # Perform one-hot encoding on the Package and Category columns
     data = pd.get_dummies(data, columns=['Package', 'Category'])

@@ -3,15 +3,16 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>786c1014-2041-41ab-b5d6-136864356775</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
+    <ProjectHome>
+    </ProjectHome>
     <StartupFile>FR1_BN.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>DroidFusion</Name>
+    <Name>FR1</Name>
     <RootNamespace>DroidFusion</RootNamespace>
-    <InterpreterId>CondaEnv|CondaEnv|TestEnvironment</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|SuperEnvironment</InterpreterId>
     <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -23,7 +24,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="FR1_.py" />
+    <Compile Include="FR1_AB.py" />
     <Compile Include="FR1_BN.py" />
     <Compile Include="FR1_NB.py" />
     <Compile Include="FR1_LR.py" />
@@ -34,6 +35,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|SuperEnvironment" />
     <InterpreterReference Include="CondaEnv|CondaEnv|TestEnvironment" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
