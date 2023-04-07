@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>786c1014-2041-41ab-b5d6-136864356775</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>FR1_NB.py</StartupFile>
+    <StartupFile>FR1_BN.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,7 +23,12 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="FR1_.py" />
+    <Compile Include="FR1_BN.py" />
     <Compile Include="FR1_NB.py" />
+    <Compile Include="FR1_LR.py" />
+    <Compile Include="FR1_MLP.py" />
+    <Compile Include="FR1_RF.py" />
     <Compile Include="FR1_SVM.py">
       <SubType>Code</SubType>
     </Compile>

@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.impute import SimpleImputer
@@ -13,32 +13,32 @@ dataset_files = ['D1_DATASET.xlsx',
                  'D2_DATASET.xlsx',
                  'D3_DATASET.xlsx',
                  'D4_DATASET.xlsx',
-                'D5_DATASET.xlsx',
-                'D6_DATASET.xlsx',
-                'D7_DATASET.xlsx',
-                'D8_DATASET.xlsx',
-                'D9_DATASET.xlsx',
-                'D10_DATASET.xlsx',
-                'D11_DATASET.xlsx',
-                'D12_DATASET.xlsx',
-                'D13_DATASET.xlsx',
-                'D14_DATASET.xlsx',
-                'D15_DATASET.xlsx',
-                'D16_DATASET.xlsx',
-                'D17_DATASET.xlsx',
-                'D18_DATASET.xlsx',
-                'D19_DATASET.xlsx',
-                'D20_DATASET.xlsx',
-                'D21_DATASET.xlsx',
-                'D22_DATASET.xlsx',
-                'D23_DATASET.xlsx',
-                'D24_DATASET.xlsx',
-                'D25_DATASET.xlsx',
-                'D26_DATASET.xlsx',
-                'D27_DATASET.xlsx',
-                'D28_DATASET.xlsx',
-                'D29_DATASET.xlsx',
-                'D30_DATASET.xlsx']
+                 'D5_DATASET.xlsx',
+                 'D6_DATASET.xlsx',
+                 'D7_DATASET.xlsx',
+                 'D8_DATASET.xlsx',
+                 'D9_DATASET.xlsx',
+                 'D10_DATASET.xlsx',
+                 'D11_DATASET.xlsx',
+                 'D12_DATASET.xlsx',
+                 'D13_DATASET.xlsx',
+                 'D14_DATASET.xlsx',
+                 'D15_DATASET.xlsx',
+                 'D16_DATASET.xlsx',
+                 'D17_DATASET.xlsx',
+                 'D18_DATASET.xlsx',
+                 'D19_DATASET.xlsx',
+                 'D20_DATASET.xlsx',
+                 'D21_DATASET.xlsx',
+                 'D22_DATASET.xlsx',
+                 'D23_DATASET.xlsx',
+                 'D24_DATASET.xlsx',
+                 'D25_DATASET.xlsx',
+                 'D26_DATASET.xlsx',
+                 'D27_DATASET.xlsx',
+                 'D28_DATASET.xlsx',
+                 'D29_DATASET.xlsx',
+                 'D30_DATASET.xlsx']
 
 # Lists to hold accuracy and f1 score values for each dataset
 accuracies = []
@@ -62,12 +62,12 @@ for dataset_file in dataset_files:
     selector = SelectKBest(chi2, k=11)
     X_new = selector.fit_transform(X, y)
 
-     # Apply min-max normalization to the selected features
+    # Apply min-max normalization to the selected features
     scaler = MinMaxScaler()
     X_new = scaler.fit_transform(X_new)
 
-    # Train a SVM classifier using 20-fold cross-validation
-    clf = SVC(kernel='linear')
+    # Train a MLP classifier using 20-fold cross-validation
+    clf = MLPClassifier(hidden_layer_sizes=(10, 5), max_iter=1000, random_state=42)
     scores = cross_val_score(clf, X_new, y, cv=20)
     accuracy = scores.mean()
     accuracies.append(accuracy)
@@ -75,7 +75,7 @@ for dataset_file in dataset_files:
 
     # Fit the model on the full dataset and save it
     clf.fit(X_new, y)
-    model_file = f'D:\\uit\\bao mat web\\project mldroid\\Trained Models\{dataset_file.replace(".xlsx", "_FR1_SVM_model.joblib")}'
+    model_file = f'D:\\uit\\bao mat web\\project mldroid\\Trained Models\{dataset_file.replace(".xlsx", "_MLP_model.joblib")}'
     joblib.dump(clf, model_file)
 
     # Make predictions on the full dataset and calculate f1 score
