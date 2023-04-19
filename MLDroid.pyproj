@@ -5,12 +5,12 @@
     <ProjectGuid>786c1014-2041-41ab-b5d6-136864356775</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>FR1_BN.py</StartupFile>
+    <StartupFile>FR1.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>FR1</Name>
+    <Name>MLDroid</Name>
     <RootNamespace>DroidFusion</RootNamespace>
     <InterpreterId>CondaEnv|CondaEnv|SuperEnvironment</InterpreterId>
     <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
@@ -24,19 +24,17 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="FR1_AB.py" />
-    <Compile Include="FR1_BN.py" />
-    <Compile Include="FR1_NB.py" />
-    <Compile Include="FR1_LR.py" />
-    <Compile Include="FR1_MLP.py" />
-    <Compile Include="FR1_RF.py" />
-    <Compile Include="FR1_SVM.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="FR1.py" />
+    <Compile Include="utils\data_process.py" />
+    <Compile Include="FR2.py" />
+    <Compile Include="utils\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|SuperEnvironment" />
     <InterpreterReference Include="CondaEnv|CondaEnv|TestEnvironment" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="utils\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -1,9 +1,15 @@
 import pandas as pd
-from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
 from sklearn.model_selection import cross_val_score
 import joblib
 import matplotlib.pyplot as plt
@@ -47,7 +53,7 @@ f_measures = []
 for dataset_file in dataset_files:
 
     # Load dataset
-    data = pd.read_excel(f'D:\\uit\\bao mat web\\MLDroid\\DATASET\\{dataset_file}')
+    data = pd.read_excel(f'D:\\uit\\BaoMatWeb\\MLDroid\\DATASET\\{dataset_file}')
 
     # Perform one-hot encoding on the Package and Category columns
     data = pd.get_dummies(data, columns=['Package', 'Category'])
@@ -66,19 +72,28 @@ for dataset_file in dataset_files:
     scaler = MinMaxScaler()
     X_new = scaler.fit_transform(X_new)
 
-    # Train a Logistic Regression classifier using 20-fold cross-validation
-    clf = LogisticRegression(random_state=42, max_iter=1000)
-    scores = cross_val_score(clf, X_new, y, cv=20)
-    accuracy = scores.mean()
-    accuracies.append(accuracy)
-    print(f"{dataset_file}: {accuracy}")
+    # Train classifiers using 20-fold cross-validation
+    clf_ab = AdaBoostClassifier(n_estimators=50)
+    clf_dnn = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500)
+    clf_dt = DecisionTreeClassifier()
+    clf_knn = KNeighborsClassifier()
+    clf_lr = LogisticRegression()
+    clf_mlp = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500)
+    clf_nb = GaussianNB()
+    clf_rf = RandomForestClassifier(n_estimators=50)
+    clf_svm = SVC(kernel='linear')
 
-    # Fit the model on the full dataset and save it
-    clf.fit(X_new, y)
-    model_file = f'D:\\uit\\bao mat web\\MLDroid\\Trained Models\{dataset_file.replace(".xlsx", "_LogisticRegression_model.joblib")}'
-    joblib.dump(clf, model_file)
 
-    # Make predictions on the full dataset and calculate f1 score
-    f_measure = f1_score(y, clf.predict(X_new), average='weighted')
-    f_measures.append(f_measure)
-    print(f"{dataset_file}: {f_measure}")
+    classifiers = [clf_svm, clf_nb, clf_rf, clf_mlp, clf_lr, clf_ab, clf_dt, clf_dnn,  clf_knn]
+
+    for clf in classifiers:
+        scores = cross_val_score(clf, X_new, y, cv=20)
+        accuracy = scores.mean()
+        accuracies.append(accuracy)
+        print(f"{type(clf).__name__} ({dataset_file}): {accuracy}")
+
+        # Make predictions on the full dataset and calculate f1 score
+        clf.fit(X, y)
+        f_measure = f1_score(y, clf.predict(X_new), average='weighted')
+        f_measures.append(f_measure)
+        print(f"{type(clf).__name__} ({dataset_file}): {f_measure}")
