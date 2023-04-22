@@ -5,7 +5,7 @@
     <ProjectGuid>786c1014-2041-41ab-b5d6-136864356775</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>FR1.py</StartupFile>
+    <StartupFile>main\supervised\FR2\results\box_plot_diagram.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -25,6 +25,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FR1.py" />
+    <Compile Include="main\supervised\FR2\AB.py" />
+    <Compile Include="main\supervised\FR2\BN.py" />
+    <Compile Include="main\supervised\FR2\DNN.py" />
+    <Compile Include="main\supervised\FR2\DT.py" />
+    <Compile Include="main\supervised\FR2\KNN.py" />
+    <Compile Include="main\supervised\FR2\LR.py" />
+    <Compile Include="main\supervised\FR2\MLP.py" />
+    <Compile Include="main\supervised\FR2\NB.py" />
+    <Compile Include="main\supervised\FR2\results\box_plot_diagram.py" />
+    <Compile Include="main\supervised\FR2\RF.py" />
+    <Compile Include="main\supervised\FR2\SVM.py" />
     <Compile Include="utils\data_process.py" />
     <Compile Include="FR2.py" />
     <Compile Include="utils\__init__.py" />
@@ -34,7 +45,17 @@
     <InterpreterReference Include="CondaEnv|CondaEnv|TestEnvironment" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="main\" />
+    <Folder Include="main\supervised\FR1\" />
+    <Folder Include="main\supervised\FR2\" />
+    <Folder Include="main\supervised\" />
+    <Folder Include="main\supervised\FR2\results\" />
+    <Folder Include="results\" />
     <Folder Include="utils\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="main\supervised\FR2\results\accuracy_fmeasure_fr1.xlsx" />
+    <Content Include="results\Results.xlsx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

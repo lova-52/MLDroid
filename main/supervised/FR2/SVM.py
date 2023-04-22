@@ -3,13 +3,12 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.metrics import f1_score, confusion_matrix
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.svm import SVC
 from sklearn.model_selection import StratifiedKFold
-from pgmpy.estimators import BayesianEstimator
-from pgmpy.models import BayesianModel
 import numpy as np
 import warnings
 from sklearn.metrics import f1_score, confusion_matrix
-import random
+warnings.filterwarnings("ignore")
 
 def gain_ratio(X, y):
     n_features = X.shape[1]
@@ -74,14 +73,11 @@ dataset_files = ['D1_DATASET.xlsx',
                  'D29_DATASET.xlsx',
                  'D30_DATASET.xlsx']
 
-#Ignore warnings
-warnings.filterwarnings("ignore")
 
 # Lists to hold accuracy and f1 score values for each dataset
 accuracies = []
 f_measures = []
 confusion_matrices = []
-
 
 for dataset_file in dataset_files:
 
@@ -89,7 +85,7 @@ for dataset_file in dataset_files:
     data = pd.read_excel(f'D:\\uit\\BaoMatWeb\\MLDroid\\DATASET\\{dataset_file}')
 
     # Shuffle the rows of the dataset
-    #data = data.sample(frac=1)
+    data = data.sample(frac=1)
 
     # Perform one-hot encoding on the Package and Category columns
     data = pd.get_dummies(data, columns=['Package', 'Category'])
@@ -103,7 +99,32 @@ for dataset_file in dataset_files:
     y = data['Class']
     selector = SelectKBest(gain_ratio, k=20)
     X_new = selector.fit_transform(X, y)
+
+    # Apply min-max normalization to the selected features
+    scaler = MinMaxScaler()
+    X_new = scaler.fit_transform(X_new)
+
+    # Train a SVM classifier using 20-fold cross-validation
+    clf = SVC(kernel='poly', C=69, random_state=None, max_iter=1000)
+    sk_folds = StratifiedKFold(n_splits=20, shuffle=True ,random_state = None)
     
-    # Save the new excel file of the selected features
-    df_new = pd.DataFrame(data=X_new)
-    df_new.to_excel(f'D:\\uit\\BaoMatWeb\\MLDroid\\DATASET\\{dataset_file[:-5]}_selected.xlsx', index=False)
+    for train_index, test_index in sk_folds.split(X_new, y):
+        X_train, X_test = X_new[train_index], X_new[test_index]
+        y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+    
+        clf.fit(X_train, y_train)
+        y_pred = clf.predict(X_test)
+    
+        confusion_matrices.append(confusion_matrix(y_test, y_pred))
+    
+        accuracy = clf.score(X_test, y_test)
+        accuracies.append(accuracy)
+    
+        f_measure = f1_score(y_test, y_pred, average='weighted')
+        f_measures.append(f_measure)
+
+    accuracy_mean = np.mean(accuracies)
+    f_measure_mean = np.mean(f_measures)
+    
+    print(f"{dataset_file}: Mean Accuracy: {accuracy_mean:.4f}")        
+    print(f"{dataset_file}: Mean F-measure: {f_measure_mean:.4f}")

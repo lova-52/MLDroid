@@ -1,15 +1,15 @@
 import pandas as pd
-from sklearn.feature_selection import SelectKBest
-from sklearn.metrics import f1_score, confusion_matrix
+from sklearn.feature_selection import SelectKBest, chi2
+from sklearn.metrics import accuracy_score, f1_score
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import StratifiedKFold
-from pgmpy.estimators import BayesianEstimator
-from pgmpy.models import BayesianModel
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import StratifiedKFold, cross_val_score
+import joblib 
+import matplotlib.pyplot as plt
 import numpy as np
 import warnings
-from sklearn.metrics import f1_score, confusion_matrix
-import random
+warnings.filterwarnings("ignore")
 
 def gain_ratio(X, y):
     n_features = X.shape[1]
@@ -43,25 +43,8 @@ def gain_ratio(X, y):
     return gain_ratios
 
 # List of dataset filenames
-dataset_files = ['D1_DATASET.xlsx',
-                 'D2_DATASET.xlsx',
-                 'D3_DATASET.xlsx',
-                 'D4_DATASET.xlsx',
-                 'D5_DATASET.xlsx',
-                 'D6_DATASET.xlsx',
-                 'D7_DATASET.xlsx',
-                 'D8_DATASET.xlsx',
-                 'D9_DATASET.xlsx',
-                 'D10_DATASET.xlsx',
-                 'D11_DATASET.xlsx',
-                 'D12_DATASET.xlsx',
-                 'D13_DATASET.xlsx',
-                 'D14_DATASET.xlsx',
-                 'D15_DATASET.xlsx',
-                 'D16_DATASET.xlsx',
-                 'D17_DATASET.xlsx',
-                 'D18_DATASET.xlsx',
-                 'D19_DATASET.xlsx',
+dataset_files = [
+
                  'D20_DATASET.xlsx',
                  'D21_DATASET.xlsx',
                  'D22_DATASET.xlsx',
@@ -74,22 +57,14 @@ dataset_files = ['D1_DATASET.xlsx',
                  'D29_DATASET.xlsx',
                  'D30_DATASET.xlsx']
 
-#Ignore warnings
-warnings.filterwarnings("ignore")
-
 # Lists to hold accuracy and f1 score values for each dataset
 accuracies = []
 f_measures = []
-confusion_matrices = []
-
 
 for dataset_file in dataset_files:
 
     # Load dataset
     data = pd.read_excel(f'D:\\uit\\BaoMatWeb\\MLDroid\\DATASET\\{dataset_file}')
-
-    # Shuffle the rows of the dataset
-    #data = data.sample(frac=1)
 
     # Perform one-hot encoding on the Package and Category columns
     data = pd.get_dummies(data, columns=['Package', 'Category'])
@@ -99,11 +74,50 @@ for dataset_file in dataset_files:
     X = data.drop('Class', axis=1)
     X = imputer.fit_transform(X)
 
-    # Perform feature selection using gain ratio
+    # Perform feature selection using chi-squared test with k = k = log2(1400)~~11
     y = data['Class']
     selector = SelectKBest(gain_ratio, k=20)
     X_new = selector.fit_transform(X, y)
-    
-    # Save the new excel file of the selected features
-    df_new = pd.DataFrame(data=X_new)
-    df_new.to_excel(f'D:\\uit\\BaoMatWeb\\MLDroid\\DATASET\\{dataset_file[:-5]}_selected.xlsx', index=False)
+
+    # Apply min-max normalization to the selected features
+    scaler = MinMaxScaler()
+    X_new = scaler.fit_transform(X_new)
+
+    # Train a DNN classifier using 20-fold cross-validation
+    clf = MLPClassifier(hidden_layer_sizes=(200, 150, 100, 50), max_iter=1000)
+    sk_folds = StratifiedKFold(n_splits = 20)
+    clf.fit(X_new, y)
+    scores = cross_val_score(clf, X_new, y, cv=sk_folds)
+    accuracy = scores.mean()
+    accuracies.append(accuracy)
+    print(f"{dataset_file}: Accuracy: {accuracy:.4f}")
+
+    # Make predictions on the full dataset and calculate f1 score
+    clf.fit(X_new, y)
+    f_measure = f1_score(y, clf.predict(X_new), average='weighted')
+    f_measures.append(f_measure)
+    print(f"{dataset_file}: F-measure: {f_measure:.4f}")
+
+#    D20_DATASET.xlsx: Accuracy: 0.8553
+#D20_DATASET.xlsx: F-measure: 0.7885
+#D21_DATASET.xlsx: Accuracy: 0.7378
+#D21_DATASET.xlsx: F-measure: 0.6265
+#D22_DATASET.xlsx: Accuracy: 0.8264
+#D22_DATASET.xlsx: F-measure: 0.7478
+#D23_DATASET.xlsx: Accuracy: 0.8553
+#D23_DATASET.xlsx: F-measure: 0.7886
+#D24_DATASET.xlsx: Accuracy: 0.8188
+#D24_DATASET.xlsx: F-measure: 0.7372
+#D25_DATASET.xlsx: Accuracy: 0.9082
+#D25_DATASET.xlsx: F-measure: 0.8646
+#D26_DATASET.xlsx: Accuracy: 0.8314
+#D26_DATASET.xlsx: F-measure: 0.7547
+#D27_DATASET.xlsx: Accuracy: 0.7860
+#D27_DATASET.xlsx: F-measure: 0.6918
+#D28_DATASET.xlsx: Accuracy: 0.8882
+#D28_DATASET.xlsx: F-measure: 0.8356
+#D29_DATASET.xlsx: Accuracy: 0.8550
+#D29_DATASET.xlsx: F-measure: 0.7882
+#D30_DATASET.xlsx: Accuracy: 0.8275
+#D30_DATASET.xlsx: F-measure: 0.7493
+#Press any key to continue . . .

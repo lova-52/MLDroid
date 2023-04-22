@@ -3,14 +3,14 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.metrics import f1_score, confusion_matrix
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import StratifiedKFold
-from pgmpy.estimators import BayesianEstimator
-from pgmpy.models import BayesianModel
 import numpy as np
 import warnings
 from sklearn.metrics import f1_score, confusion_matrix
 import random
 
+#Define gain ratio function
 def gain_ratio(X, y):
     n_features = X.shape[1]
     X = X.astype('int64')
@@ -74,6 +74,9 @@ dataset_files = ['D1_DATASET.xlsx',
                  'D29_DATASET.xlsx',
                  'D30_DATASET.xlsx']
 
+random.shuffle(dataset_files)
+print(dataset_files)
+
 #Ignore warnings
 warnings.filterwarnings("ignore")
 
@@ -89,7 +92,7 @@ for dataset_file in dataset_files:
     data = pd.read_excel(f'D:\\uit\\BaoMatWeb\\MLDroid\\DATASET\\{dataset_file}')
 
     # Shuffle the rows of the dataset
-    #data = data.sample(frac=1)
+    data = data.sample(frac=1)
 
     # Perform one-hot encoding on the Package and Category columns
     data = pd.get_dummies(data, columns=['Package', 'Category'])
@@ -103,7 +106,67 @@ for dataset_file in dataset_files:
     y = data['Class']
     selector = SelectKBest(gain_ratio, k=20)
     X_new = selector.fit_transform(X, y)
+
+    # Apply min-max normalization to the selected features
+    scaler = MinMaxScaler()
+    X_new = scaler.fit_transform(X_new)
+
+    # Train a DT classifier using 20-fold cross-validation
+    clf = DecisionTreeClassifier(random_state=None)
+    sk_folds = StratifiedKFold(n_splits=20, shuffle=True ,random_state = None)
     
-    # Save the new excel file of the selected features
-    df_new = pd.DataFrame(data=X_new)
-    df_new.to_excel(f'D:\\uit\\BaoMatWeb\\MLDroid\\DATASET\\{dataset_file[:-5]}_selected.xlsx', index=False)
+    for train_index, test_index in sk_folds.split(X_new, y):
+        X_train, X_test = X_new[train_index], X_new[test_index]
+        y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+
+        clf.fit(X_train, y_train)
+        y_pred = clf.predict(X_test)
+
+        # Append confusion matrix to list of confusion matrices
+        confusion_matrices.append(confusion_matrix(y_test, y_pred))
+
+        # Append accuracy and f1 score to respective lists
+        accuracy = clf.score(X_test, y_test)
+        accuracies.append(accuracy)
+
+        f_measure = f1_score(y_test, y_pred, average='weighted')
+        f_measures.append(f_measure)
+
+    # Calculate mean accuracy and f1 score
+    accuracy_mean = np.mean(accuracies)
+    f_measure_mean = np.mean(f_measures)
+
+    # Print mean accuracy and f1 score
+    print(f"{dataset_file}: Accuracy: {accuracy_mean:.4f}  F-measure: {f_measure_mean:.4f}")
+
+    #Result:
+    #D11_DATASET.xlsx: Accuracy: 0.8599  F-measure: 0.7951
+    #D15_DATASET.xlsx: Accuracy: 0.8539  F-measure: 0.7866
+    #D28_DATASET.xlsx: Accuracy: 0.8653  F-measure: 0.8030
+    #D13_DATASET.xlsx: Accuracy: 0.8876  F-measure: 0.8352
+    #D23_DATASET.xlsx: Accuracy: 0.8811  F-measure: 0.8259
+    #D2_DATASET.xlsx: Accuracy: 0.8848  F-measure: 0.8312
+    #D26_DATASET.xlsx: Accuracy: 0.8772  F-measure: 0.8203
+    #D14_DATASET.xlsx: Accuracy: 0.8803  F-measure: 0.8247
+    #D12_DATASET.xlsx: Accuracy: 0.8793  F-measure: 0.8232
+    #D20_DATASET.xlsx: Accuracy: 0.8769  F-measure: 0.8197
+    #D25_DATASET.xlsx: Accuracy: 0.8797  F-measure: 0.8238
+    #D24_DATASET.xlsx: Accuracy: 0.8747  F-measure: 0.8166
+    #D18_DATASET.xlsx: Accuracy: 0.8760  F-measure: 0.8186
+    #D1_DATASET.xlsx: Accuracy: 0.8677  F-measure: 0.8069
+    #D17_DATASET.xlsx: Accuracy: 0.8662  F-measure: 0.8048
+    #D10_DATASET.xlsx: Accuracy: 0.8676  F-measure: 0.8067
+    #D9_DATASET.xlsx: Accuracy: 0.8670  F-measure: 0.8058
+    #D5_DATASET.xlsx: Accuracy: 0.8632  F-measure: 0.8005
+    #D27_DATASET.xlsx: Accuracy: 0.8592  F-measure: 0.7948
+    #D19_DATASET.xlsx: Accuracy: 0.8614  F-measure: 0.7979
+    #D29_DATASET.xlsx: Accuracy: 0.8611  F-measure: 0.7974
+    #D8_DATASET.xlsx: Accuracy: 0.8565  F-measure: 0.7910
+    #D16_DATASET.xlsx: Accuracy: 0.8606  F-measure: 0.7970
+    #D6_DATASET.xlsx: Accuracy: 0.8611  F-measure: 0.7976
+    #D30_DATASET.xlsx: Accuracy: 0.8597  F-measure: 0.7956
+    #D3_DATASET.xlsx: Accuracy: 0.8584  F-measure: 0.7938
+    #D7_DATASET.xlsx: Accuracy: 0.8600  F-measure: 0.7960
+    #D21_DATASET.xlsx: Accuracy: 0.8556  F-measure: 0.7900
+    #D4_DATASET.xlsx: Accuracy: 0.8553  F-measure: 0.7894
+    #D22_DATASET.xlsx: Accuracy: 0.8543  F-measure: 0.7880
