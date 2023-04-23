@@ -74,7 +74,7 @@ for dataset_file in dataset_files:
     X_new = scaler.fit_transform(X_new)
 
     # Train a LR classifier using 20-fold cross-validation
-    clf = clf = LogisticRegression(random_state=None)
+    clf = LogisticRegression(random_state=16)
     sk_folds = StratifiedKFold(n_splits=20, shuffle=True ,random_state = None)
     
     for train_index, test_index in sk_folds.split(X_new, y):
@@ -102,3 +102,33 @@ for dataset_file in dataset_files:
     print(f"{dataset_file}: Accuracy: {accuracy_mean*100:.2f}  F-measure: {f_measure_mean:.2f}")
 
 #Result:
+#D11_DATASET.xlsx: Accuracy: 88.19  F-measure: 0.84
+#D23_DATASET.xlsx: Accuracy: 89.16  F-measure: 0.86
+#D20_DATASET.xlsx: Accuracy: 89.03  F-measure: 0.86
+#D8_DATASET.xlsx: Accuracy: 86.38  F-measure: 0.83
+#D3_DATASET.xlsx: Accuracy: 86.35  F-measure: 0.83
+#D16_DATASET.xlsx: Accuracy: 87.82  F-measure: 0.84
+#D9_DATASET.xlsx: Accuracy: 87.79  F-measure: 0.84
+#D17_DATASET.xlsx: Accuracy: 87.76  F-measure: 0.84
+#D27_DATASET.xlsx: Accuracy: 86.97  F-measure: 0.83
+#D12_DATASET.xlsx: Accuracy: 87.05  F-measure: 0.83
+#D25_DATASET.xlsx: Accuracy: 87.46  F-measure: 0.84
+#D2_DATASET.xlsx: Accuracy: 87.84  F-measure: 0.84
+#D14_DATASET.xlsx: Accuracy: 88.14  F-measure: 0.85
+#D18_DATASET.xlsx: Accuracy: 88.30  F-measure: 0.85
+#D10_DATASET.xlsx: Accuracy: 88.46  F-measure: 0.85
+#D19_DATASET.xlsx: Accuracy: 88.64  F-measure: 0.85
+#D13_DATASET.xlsx: Accuracy: 89.05  F-measure: 0.86
+#D7_DATASET.xlsx: Accuracy: 89.14  F-measure: 0.86
+#D24_DATASET.xlsx: Accuracy: 88.84  F-measure: 0.85
+#D15_DATASET.xlsx: Accuracy: 88.80  F-measure: 0.85
+#D1_DATASET.xlsx: Accuracy: 88.43  F-measure: 0.85
+#D29_DATASET.xlsx: Accuracy: 88.35  F-measure: 0.85
+#D21_DATASET.xlsx: Accuracy: 87.95  F-measure: 0.84
+#D5_DATASET.xlsx: Accuracy: 87.85  F-measure: 0.84
+#D6_DATASET.xlsx: Accuracy: 87.86  F-measure: 0.84
+#D22_DATASET.xlsx: Accuracy: 87.80  F-measure: 0.84
+#D28_DATASET.xlsx: Accuracy: 87.84  F-measure: 0.84
+#D4_DATASET.xlsx: Accuracy: 87.85  F-measure: 0.84
+#D30_DATASET.xlsx: Accuracy: 87.91  F-measure: 0.84
+#D26_DATASET.xlsx: Accuracy: 87.84  F-measure: 0.84

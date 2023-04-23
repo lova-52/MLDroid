@@ -1,10 +1,10 @@
 import pandas as pd
-from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.metrics import f1_score, confusion_matrix
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import SVC
 from sklearn.model_selection import StratifiedKFold
+from sklearn.feature_selection import VarianceThreshold
 import numpy as np
 import warnings
 from sklearn.metrics import f1_score, confusion_matrix
@@ -64,10 +64,10 @@ for dataset_file in dataset_files:
     X = data.drop('Class', axis=1)
     X = imputer.fit_transform(X)
 
-    # Perform feature selection using gain ratio
+    # Perform feature selection using VarianceThreshold
     y = data['Class']
-    selector = SelectKBest(chi2, k=20)
-    X_new = selector.fit_transform(X, y)
+    selector = VarianceThreshold(threshold=0.1)
+    X_new = selector.fit_transform(X)
 
     # Apply min-max normalization to the selected features
     scaler = MinMaxScaler()
@@ -99,33 +99,4 @@ for dataset_file in dataset_files:
     print(f"{dataset_file}: Accuracy: {accuracy_mean:.4f}  F-measure: {f_measure_mean:.2f}")
 
     #Result:
-    #D1_DATASET.xlsx: Accuracy: 0.8241  F-measure: 0.7868
-    #D2_DATASET.xlsx: Accuracy: 0.8801  F-measure: 0.8539
-    #D3_DATASET.xlsx: Accuracy: 0.8773  F-measure: 0.8480
-    #D4_DATASET.xlsx: Accuracy: 0.8834  F-measure: 0.8561
-    #D5_DATASET.xlsx: Accuracy: 0.8805  F-measure: 0.8550
-    #D6_DATASET.xlsx: Accuracy: 0.8848  F-measure: 0.8592
-    #D7_DATASET.xlsx: Accuracy: 0.8940  F-measure: 0.8702
-    #D8_DATASET.xlsx: Accuracy: 0.8823  F-measure: 0.8590
-    #D9_DATASET.xlsx: Accuracy: 0.8850  F-measure: 0.8618
-    #D10_DATASET.xlsx: Accuracy: 0.8879  F-measure: 0.8644
-    #D11_DATASET.xlsx: Accuracy: 0.8901  F-measure: 0.8670
-    #D12_DATASET.xlsx: Accuracy: 0.8891  F-measure: 0.8649
-    #D13_DATASET.xlsx: Accuracy: 0.8965  F-measure: 0.8736
-    #D14_DATASET.xlsx: Accuracy: 0.8994  F-measure: 0.8772
-    #D15_DATASET.xlsx: Accuracy: 0.8994  F-measure: 0.8771
-    #D16_DATASET.xlsx: Accuracy: 0.9042  F-measure: 0.8829
-    #D17_DATASET.xlsx: Accuracy: 0.9033  F-measure: 0.8818
-    #D18_DATASET.xlsx: Accuracy: 0.9054  F-measure: 0.8844
-    #D19_DATASET.xlsx: Accuracy: 0.9063  F-measure: 0.8852
-    #D20_DATASET.xlsx: Accuracy: 0.9071  F-measure: 0.8864
-    #D21_DATASET.xlsx: Accuracy: 0.9027  F-measure: 0.8816
-    #D22_DATASET.xlsx: Accuracy: 0.9026  F-measure: 0.8817
-    #D23_DATASET.xlsx: Accuracy: 0.9030  F-measure: 0.8823
-    #D24_DATASET.xlsx: Accuracy: 0.9006  F-measure: 0.8790
-    #D25_DATASET.xlsx: Accuracy: 0.9027  F-measure: 0.8816
-    #D26_DATASET.xlsx: Accuracy: 0.9033  F-measure: 0.8826
-    #D27_DATASET.xlsx: Accuracy: 0.8958  F-measure: 0.8757
-    #D28_DATASET.xlsx: Accuracy: 0.8977  F-measure: 0.8780
-    #D29_DATASET.xlsx: Accuracy: 0.8967  F-measure: 0.8761
-    #D30_DATASET.xlsx: Accuracy: 0.8975  F-measure: 0.8772
+   

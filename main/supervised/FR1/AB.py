@@ -76,7 +76,7 @@ for dataset_file in dataset_files:
     X_new = scaler.fit_transform(X_new)
 
     # Train an AB classifier using 20-fold cross-validation
-    clf = AdaBoostClassifier(n_estimators=100, random_state=None)
+    clf = AdaBoostClassifier(n_estimators=100, random_state=12)
     sk_folds = StratifiedKFold(n_splits=20, shuffle=True ,random_state = None)
     
     for train_index, test_index in sk_folds.split(X_new, y):

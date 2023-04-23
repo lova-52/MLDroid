@@ -3,11 +3,12 @@ from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.metrics import f1_score, confusion_matrix
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import StratifiedKFold
 import numpy as np
 from sklearn.metrics import f1_score, confusion_matrix
 import random
+
 
 # List of dataset filenames
 dataset_files = ['D1_DATASET.xlsx',
@@ -42,7 +43,7 @@ dataset_files = ['D1_DATASET.xlsx',
                  'D30_DATASET.xlsx']
 
 random.shuffle(dataset_files)
-print(dataset_files)
+
 
 # Lists to hold accuracy and f1 score values for each dataset
 accuracies = []
@@ -75,8 +76,8 @@ for dataset_file in dataset_files:
     scaler = MinMaxScaler()
     X_new = scaler.fit_transform(X_new)
 
-    # Train a RF classifier using 20-fold cross-validation
-    clf = RandomForestClassifier(n_estimators=500, random_state=None)
+    # Train a DT classifier using 20-fold cross-validation
+    clf = DecisionTreeClassifier(random_state=14)
     sk_folds = StratifiedKFold(n_splits=20, shuffle=True ,random_state = None)
     
     for train_index, test_index in sk_folds.split(X_new, y):
@@ -103,34 +104,34 @@ for dataset_file in dataset_files:
     # Print mean accuracy and f1 score
     print(f"{dataset_file}: Accuracy: {accuracy_mean*100:.2f}  F-measure: {f_measure_mean:.2f}")
 
-#Result:
-#D23_DATASET.xlsx: Accuracy: 91.30  F-measure: 0.90
-#D12_DATASET.xlsx: Accuracy: 89.55  F-measure: 0.87
-#D13_DATASET.xlsx: Accuracy: 92.48  F-measure: 0.90
-#D29_DATASET.xlsx: Accuracy: 91.07  F-measure: 0.88
-#D27_DATASET.xlsx: Accuracy: 89.98  F-measure: 0.87
-#D22_DATASET.xlsx: Accuracy: 89.95  F-measure: 0.88
-#D4_DATASET.xlsx: Accuracy: 90.00  F-measure: 0.88
-#D6_DATASET.xlsx: Accuracy: 90.08  F-measure: 0.88
-#D18_DATASET.xlsx: Accuracy: 90.53  F-measure: 0.88
-#D10_DATASET.xlsx: Accuracy: 90.61  F-measure: 0.88
-#D20_DATASET.xlsx: Accuracy: 90.77  F-measure: 0.89
-#D28_DATASET.xlsx: Accuracy: 91.14  F-measure: 0.89
-#D25_DATASET.xlsx: Accuracy: 91.46  F-measure: 0.89
-#D16_DATASET.xlsx: Accuracy: 91.90  F-measure: 0.90
-#D21_DATASET.xlsx: Accuracy: 91.20  F-measure: 0.89
-#D3_DATASET.xlsx: Accuracy: 90.95  F-measure: 0.89
-#D14_DATASET.xlsx: Accuracy: 91.11  F-measure: 0.89
-#D30_DATASET.xlsx: Accuracy: 91.16  F-measure: 0.89
-#D19_DATASET.xlsx: Accuracy: 91.21  F-measure: 0.89
-#D15_DATASET.xlsx: Accuracy: 91.15  F-measure: 0.89
-#D7_DATASET.xlsx: Accuracy: 91.32  F-measure: 0.89
-#D5_DATASET.xlsx: Accuracy: 91.15  F-measure: 0.89
-#D26_DATASET.xlsx: Accuracy: 91.19  F-measure: 0.89
-#D2_DATASET.xlsx: Accuracy: 91.29  F-measure: 0.89
-#D1_DATASET.xlsx: Accuracy: 90.94  F-measure: 0.89
-#D24_DATASET.xlsx: Accuracy: 90.69  F-measure: 0.89
-#D9_DATASET.xlsx: Accuracy: 90.69  F-measure: 0.89
-#D8_DATASET.xlsx: Accuracy: 90.31  F-measure: 0.88
-#D11_DATASET.xlsx: Accuracy: 90.33  F-measure: 0.88
-#D17_DATASET.xlsx: Accuracy: 90.29  F-measure: 0.88
+    #Result:
+    #D2_DATASET.xlsx: Accuracy: 92.84  F-measure: 0.91
+    #D16_DATASET.xlsx: Accuracy: 94.41  F-measure: 0.93
+    #D20_DATASET.xlsx: Accuracy: 93.30  F-measure: 0.92
+    #D8_DATASET.xlsx: Accuracy: 89.39  F-measure: 0.87
+    #D13_DATASET.xlsx: Accuracy: 90.63  F-measure: 0.89
+    #D5_DATASET.xlsx: Accuracy: 89.46  F-measure: 0.88
+    #D12_DATASET.xlsx: Accuracy: 89.22  F-measure: 0.87
+    #D23_DATASET.xlsx: Accuracy: 89.08  F-measure: 0.87
+    #D19_DATASET.xlsx: Accuracy: 89.39  F-measure: 0.87
+    #D21_DATASET.xlsx: Accuracy: 88.02  F-measure: 0.86
+    #D14_DATASET.xlsx: Accuracy: 88.54  F-measure: 0.87
+    #D17_DATASET.xlsx: Accuracy: 88.28  F-measure: 0.86
+    #D28_DATASET.xlsx: Accuracy: 88.68  F-measure: 0.87
+    #D7_DATASET.xlsx: Accuracy: 88.96  F-measure: 0.87
+    #D6_DATASET.xlsx: Accuracy: 89.06  F-measure: 0.87
+    #D4_DATASET.xlsx: Accuracy: 89.02  F-measure: 0.87
+    #D9_DATASET.xlsx: Accuracy: 89.12  F-measure: 0.87
+    #D25_DATASET.xlsx: Accuracy: 89.46  F-measure: 0.88
+    #D30_DATASET.xlsx: Accuracy: 89.55  F-measure: 0.88
+    #D3_DATASET.xlsx: Accuracy: 89.41  F-measure: 0.87
+    #D27_DATASET.xlsx: Accuracy: 88.85  F-measure: 0.87
+    #D24_DATASET.xlsx: Accuracy: 88.40  F-measure: 0.87
+    #D1_DATASET.xlsx: Accuracy: 88.11  F-measure: 0.86
+    #D11_DATASET.xlsx: Accuracy: 88.24  F-measure: 0.86
+    #D29_DATASET.xlsx: Accuracy: 88.11  F-measure: 0.86
+    #D18_DATASET.xlsx: Accuracy: 88.30  F-measure: 0.86
+    #D10_DATASET.xlsx: Accuracy: 88.34  F-measure: 0.86
+    #D22_DATASET.xlsx: Accuracy: 88.41  F-measure: 0.86
+    #D15_DATASET.xlsx: Accuracy: 88.42  F-measure: 0.86
+    #D26_DATASET.xlsx: Accuracy: 88.54  F-measure: 0.87.

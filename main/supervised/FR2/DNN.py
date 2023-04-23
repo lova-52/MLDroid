@@ -97,27 +97,3 @@ for dataset_file in dataset_files:
     f_measure = f1_score(y, clf.predict(X_new), average='weighted')
     f_measures.append(f_measure)
     print(f"{dataset_file}: F-measure: {f_measure:.4f}")
-
-#    D20_DATASET.xlsx: Accuracy: 0.8553
-#D20_DATASET.xlsx: F-measure: 0.7885
-#D21_DATASET.xlsx: Accuracy: 0.7378
-#D21_DATASET.xlsx: F-measure: 0.6265
-#D22_DATASET.xlsx: Accuracy: 0.8264
-#D22_DATASET.xlsx: F-measure: 0.7478
-#D23_DATASET.xlsx: Accuracy: 0.8553
-#D23_DATASET.xlsx: F-measure: 0.7886
-#D24_DATASET.xlsx: Accuracy: 0.8188
-#D24_DATASET.xlsx: F-measure: 0.7372
-#D25_DATASET.xlsx: Accuracy: 0.9082
-#D25_DATASET.xlsx: F-measure: 0.8646
-#D26_DATASET.xlsx: Accuracy: 0.8314
-#D26_DATASET.xlsx: F-measure: 0.7547
-#D27_DATASET.xlsx: Accuracy: 0.7860
-#D27_DATASET.xlsx: F-measure: 0.6918
-#D28_DATASET.xlsx: Accuracy: 0.8882
-#D28_DATASET.xlsx: F-measure: 0.8356
-#D29_DATASET.xlsx: Accuracy: 0.8550
-#D29_DATASET.xlsx: F-measure: 0.7882
-#D30_DATASET.xlsx: Accuracy: 0.8275
-#D30_DATASET.xlsx: F-measure: 0.7493
-#Press any key to continue . . .
