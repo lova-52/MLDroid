@@ -1,14 +1,16 @@
 import pandas as pd
 import numpy as np
 import random
+import re
 import warnings
-from tqdm import tqdm
 from sklearn.metrics import f1_score, confusion_matrix
 from sklearn.model_selection import StratifiedKFold
 from sklearn.ensemble import (
     AdaBoostClassifier,
     RandomForestClassifier,
 )
+
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import (
     BernoulliNB as BayesianClassifer,
@@ -17,6 +19,8 @@ from sklearn.naive_bayes import (
 from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
+
+from tabulate import tabulate
 
 from utils.data_process import data_processing
 from utils.dataset_loader import load_dataset
@@ -35,8 +39,9 @@ def model_training(classifier_name, feature_selection_name):
     confusion_matrices = []
     accuracies = []
     f_measures = []
+    results = []
     
-    for dataset_file in tqdm(dataset_files, desc="Dataset Progress"):
+    for dataset_file in dataset_files:
         # Load dataset
         data = pd.read_excel(f'D:\\uit\\BaoMatWeb\\MLDroid\\DATASET\\{dataset_file}')
 
@@ -110,6 +115,20 @@ def model_training(classifier_name, feature_selection_name):
         accuracy_mean = np.mean(accuracies)
         f_measure_mean = np.mean(f_measures)
 
-        # Print mean accuracy and f1 score
-        print(f"{dataset_file}: Accuracy: {accuracy_mean*100:.2f}  F-measure: {f_measure_mean:.2f}")
+
+        results.append((dataset_file, accuracy_mean, f_measure_mean))
+
+    #Sort results
+    results_sorted = sorted(results, key=lambda x: int(re.findall(r'\d+', x[0])[0]))
+
+    #Make a list of headers for the table
+    headers = ["Dataset", "Accuracy", "F-measure"]
+
+    #Make a list of rows for the table
+    rows = []
+    for result in results_sorted:
+        rows.append([result[0], f"{result[1]*100:.2f}", f"{result[2]:.2f}"])
+
+    #Print table
+    print(tabulate(rows, headers=headers))
 
