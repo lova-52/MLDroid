@@ -5,7 +5,8 @@
     <ProjectGuid>786c1014-2041-41ab-b5d6-136864356775</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>main\supervised\FR1\SVM.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -24,31 +25,14 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="FR1.py" />
-    <Compile Include="main\supervised\FR1\DNN.py" />
-    <Compile Include="main\supervised\FR1\KNN.py" />
-    <Compile Include="main\supervised\FR1\BN.py" />
-    <Compile Include="main\supervised\FR1\LR.py" />
-    <Compile Include="main\supervised\FR1\MLP.py" />
-    <Compile Include="main\supervised\FR1\NB.py" />
-    <Compile Include="main\supervised\FR1\DT.py" />
-    <Compile Include="main\supervised\FR1\results\box_plot_diagram.py" />
-    <Compile Include="main\supervised\FR1\RF.py" />
-    <Compile Include="main\supervised\FR1\SVM.py" />
-    <Compile Include="main\supervised\FR2\AB.py" />
-    <Compile Include="main\supervised\FR2\BN.py" />
-    <Compile Include="main\supervised\FR2\DNN.py" />
-    <Compile Include="main\supervised\FR2\DT.py" />
-    <Compile Include="main\supervised\FR2\KNN.py" />
-    <Compile Include="main\supervised\FR2\LR.py" />
-    <Compile Include="main\supervised\FR2\MLP.py" />
-    <Compile Include="main\supervised\FR2\NB.py" />
-    <Compile Include="main\supervised\FR2\results\box_plot_diagram.py" />
-    <Compile Include="main\supervised\FR2\RF.py" />
-    <Compile Include="main\supervised\FR2\SVM.py" />
-    <Compile Include="main\supervised\FR3\SVM.py" />
+    <Compile Include="total results\results\fr1\box_plot_diagram.py" />
+    <Compile Include="total results\results\fr2\box_plot_diagram.py" />
+    <Compile Include="src\BN.py" />
+    <Compile Include="utils\classifier_menu.py" />
+    <Compile Include="utils\dataset_loader.py" />
     <Compile Include="utils\data_process.py" />
-    <Compile Include="FR2.py" />
+    <Compile Include="utils\feature_select.py" />
+    <Compile Include="utils\model_train.py" />
     <Compile Include="utils\__init__.py" />
   </ItemGroup>
   <ItemGroup>
@@ -56,20 +40,22 @@
     <InterpreterReference Include="CondaEnv|CondaEnv|TestEnvironment" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="main\" />
-    <Folder Include="main\supervised\FR1\" />
-    <Folder Include="main\supervised\FR1\results\" />
-    <Folder Include="main\supervised\FR2\" />
-    <Folder Include="main\supervised\" />
-    <Folder Include="main\supervised\FR2\results\" />
-    <Folder Include="main\supervised\FR3\" />
+    <Folder Include="src\" />
+    <Folder Include="total results\results\" />
     <Folder Include="total results\" />
+    <Folder Include="total results\results\fr1\" />
+    <Folder Include="total results\results\fr2\" />
+    <Folder Include="total results\results\fr3\" />
     <Folder Include="utils\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="main\supervised\FR1\AB.py" />
-    <Content Include="main\supervised\FR1\results\accuracy_fmeasure_fr1.xlsx" />
-    <Content Include="main\supervised\FR2\results\accuracy_fmeasure_fr2.xlsx" />
+    <Content Include="total results\results\fr1\accuracy_fmeasure_fr1.xlsx" />
+    <Content Include="total results\results\fr1\accuracy_fr1.png" />
+    <Content Include="total results\results\fr1\fmeasure_fr1.png" />
+    <Content Include="total results\results\fr2\accuracy_fmeasure_fr2.xlsx" />
+    <Content Include="total results\results\fr2\accuracy_fr2.png" />
+    <Content Include="total results\results\fr2\fmeasure_fr2.png" />
+    <Content Include="total results\results\fr3\accuracy_fmeasure_fr3.xlsx" />
     <Content Include="total results\Total_Results.xlsx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
