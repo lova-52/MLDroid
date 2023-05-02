@@ -2,10 +2,6 @@ from sklearn.decomposition import PCA
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import GridSearchCV
-
-import statsmodels.api as sm
-from statsmodels.stats.outliers_influence import summary_table
 
 import numpy as np
 
