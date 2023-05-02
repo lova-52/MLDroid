@@ -40,8 +40,13 @@ def model_training(classifier_name, feature_selection_name):
     accuracies = []
     f_measures = []
     results = []
-    
+
+    print("Training ", classifier_name, " classifier...")
+
     for dataset_file in dataset_files:
+        #Print the current dataset file
+        print({dataset_file})
+
         # Load dataset
         data = pd.read_excel(f'D:\\uit\\BaoMatWeb\\MLDroid\\DATASET\\{dataset_file}')
 
@@ -94,7 +99,7 @@ def model_training(classifier_name, feature_selection_name):
             pass
         else:
             print("Invalid classifier name.")
-
+      
         sk_folds = StratifiedKFold(n_splits=20, shuffle=True, random_state=None)
 
         for train_index, test_index in sk_folds.split(X_new, y):
