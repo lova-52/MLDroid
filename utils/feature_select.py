@@ -1,3 +1,4 @@
+from sklearn.decomposition import PCA
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.linear_model import LogisticRegression
@@ -104,6 +105,10 @@ def feature_selecting(feature_selection_name, X, y):
         k = 20 #Select top 20 features
         top_k_features = [x[0] for x in ranked_features[:k]]
         X_new = X[:, top_k_features]
+        return X_new
+    elif feature_selection_name == "FR6":
+        pca = PCA(n_components=20)
+        X_new = pca.fit_transform(X)
         return X_new
     else:
         raise ValueError(f"Invalid feature selection method: {feature_selection_name}")
