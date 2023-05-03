@@ -1,6 +1,8 @@
+import os
+import pandas as pd
 import random
 
-def load_dataset():
+def assign_dataset():
     # List of dataset filenames
     dataset_files = ['D1_DATASET.xlsx',
                      'D2_DATASET.xlsx',
@@ -36,3 +38,19 @@ def load_dataset():
     #Shuffle the datasets
     random.shuffle(dataset_files)
     return dataset_files
+
+def load_dataset(dataset_file):
+    #Get the current working directory
+    cwd = os.getcwd()
+
+    #Define the relative path to the dataset folder and file name
+    relative_path = 'datasets\\' + dataset_file
+
+    #Join the current working directory with the relative path to get the full path to the file
+    file_path = os.path.join(cwd, relative_path)
+
+    #Load the dataset           
+    data = pd.read_excel(f'{file_path}')
+    print("Loading ", {dataset_file})
+
+    return data
