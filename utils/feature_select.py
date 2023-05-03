@@ -1,5 +1,5 @@
 from sklearn.decomposition import PCA
-from sklearn.feature_selection import SelectKBest, chi2
+from sklearn.feature_selection import SelectKBest, chi2, f_regression
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.linear_model import LogisticRegression
 
@@ -78,6 +78,25 @@ def ULR(X, y):
     coef_pval_vals.sort(key=lambda x: abs(x[1]), reverse=True)
     return coef_pval_vals
 
+#Define Consistency subset evaluation function
+def consistency_subset_evaluation(X, y):
+    Z = X.shape[1]
+    ICNR = np.zeros(Z)
+    for i in range(Z):
+        A = X[:, i]
+        INC = 0
+        Z_i = 0
+        for j in range(len(A)):
+            # count the number of samples with the same feature value but different class label
+            A0 = np.sum(np.logical_and(A == A[j], y == 0))
+            A1 = np.sum(np.logical_and(A == A[j], y == 1))
+            if A1 < A0:
+                INC += A0 - A1
+            Z_i += 1
+        # calculate inconsistency rate for the feature
+        ICNR[i] = INC / Z_i
+    return ICNR
+
 #Define feature selecting function
 def feature_selecting(feature_selection_name, X, y):
     if feature_selection_name == "FR1":
@@ -105,6 +124,16 @@ def feature_selecting(feature_selection_name, X, y):
     elif feature_selection_name == "FR6":
         pca = PCA(n_components=20)
         X_new = pca.fit_transform(X)
+        return X_new
+    elif feature_selection_name == "FS1":
+        selector = SelectKBest(score_func=f_regression, k=20)
+        X_new = selector.fit_transform(X, y)
+        return X_new
+    elif feature_selection_name == "FS2":
+        ICNR = consistency_subset_evaluation(X, y)
+        # select top 20 features based on inconsistency rates
+        top_k_features = np.argsort(ICNR)[:20]
+        X_new = X[:, top_k_features]
         return X_new
     else:
         raise ValueError(f"Invalid feature selection method: {feature_selection_name}")
