@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os
 import random
 import re
 import warnings
@@ -23,10 +24,9 @@ from sklearn.svm import SVC
 from tabulate import tabulate
 
 from utils.data_process import data_processing
-from utils.dataset_loader import load_dataset
+from utils.dataset_loader import *
 from utils.feature_select import feature_selecting
 
-from utils.dataset_loader import *
 
 #Ignore warnings
 warnings.filterwarnings("ignore")
@@ -79,7 +79,7 @@ def choose_classifier(classifier_name):
 def model_training(classifier_name, feature_selection_name):
 
     # List of dataset filenames
-    dataset_files = load_dataset()
+    dataset_files = assign_dataset()
 
     #List to hold confusion matricesm, accuracies, f-measure and results
     confusion_matrices = []
@@ -94,8 +94,8 @@ def model_training(classifier_name, feature_selection_name):
   
     while True:
         for dataset_file in dataset_files:
-            # Load dataset
-            data = pd.read_excel(f'D:\\uit\\BaoMatWeb\\MLDroid\\DATASET\\{dataset_file}')
+            #Load the dataset           
+            data = load_dataset(dataset_file)
 
             #Process data
             y = data['Class']
@@ -138,6 +138,7 @@ def model_training(classifier_name, feature_selection_name):
             break   
 
     #Sort results
+    results.pop(0)
     results_sorted = sorted(results, key=lambda x: int(re.findall(r'\d+', x[0])[0]))
 
     #Make a list of headers for the table
