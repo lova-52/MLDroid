@@ -5,15 +5,14 @@
     <ProjectGuid>786c1014-2041-41ab-b5d6-136864356775</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>
-    </StartupFile>
+    <StartupFile>src\main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>MLDroid</Name>
     <RootNamespace>DroidFusion</RootNamespace>
-    <InterpreterId>CondaEnv|CondaEnv|SuperEnvironment</InterpreterId>
+    <InterpreterId>Global|VisualStudio|SuperEnvironment-64bit</InterpreterId>
     <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -25,9 +24,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="total results\results\fr1\box_plot_diagram.py" />
-    <Compile Include="total results\results\fr2\box_plot_diagram.py" />
-    <Compile Include="src\BN.py" />
+    <Compile Include="results\supervised\fr1\box_plot_diagram.py" />
+    <Compile Include="results\supervised\fr2\box_plot_diagram.py" />
+    <Compile Include="src\main.py" />
     <Compile Include="utils\classifier_menu.py" />
     <Compile Include="utils\dataset_loader.py" />
     <Compile Include="utils\data_process.py" />
@@ -36,27 +35,59 @@
     <Compile Include="utils\__init__.py" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="CondaEnv|CondaEnv|SuperEnvironment" />
-    <InterpreterReference Include="CondaEnv|CondaEnv|TestEnvironment" />
+    <InterpreterReference Include="Global|VisualStudio|SuperEnvironment-64bit" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="datasets\" />
     <Folder Include="src\" />
-    <Folder Include="total results\results\" />
-    <Folder Include="total results\" />
-    <Folder Include="total results\results\fr1\" />
-    <Folder Include="total results\results\fr2\" />
-    <Folder Include="total results\results\fr3\" />
+    <Folder Include="results\supervised\" />
+    <Folder Include="results\" />
+    <Folder Include="results\supervised\fr1\" />
+    <Folder Include="results\supervised\fr2\" />
+    <Folder Include="results\supervised\fr3\" />
     <Folder Include="utils\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="total results\results\fr1\accuracy_fmeasure_fr1.xlsx" />
-    <Content Include="total results\results\fr1\accuracy_fr1.png" />
-    <Content Include="total results\results\fr1\fmeasure_fr1.png" />
-    <Content Include="total results\results\fr2\accuracy_fmeasure_fr2.xlsx" />
-    <Content Include="total results\results\fr2\accuracy_fr2.png" />
-    <Content Include="total results\results\fr2\fmeasure_fr2.png" />
-    <Content Include="total results\results\fr3\accuracy_fmeasure_fr3.xlsx" />
-    <Content Include="total results\Total_Results.xlsx" />
+    <Content Include="datasets\D10_DATASET.xlsx" />
+    <Content Include="datasets\D11_DATASET.xlsx" />
+    <Content Include="datasets\D12_DATASET.xlsx" />
+    <Content Include="datasets\D13_DATASET.xlsx" />
+    <Content Include="datasets\D14_DATASET.xlsx" />
+    <Content Include="datasets\D15_DATASET.xlsx" />
+    <Content Include="datasets\D16_DATASET.xlsx" />
+    <Content Include="datasets\D17_DATASET.xlsx" />
+    <Content Include="datasets\D18_DATASET.xlsx" />
+    <Content Include="datasets\D19_DATASET.xlsx" />
+    <Content Include="datasets\D1_DATASET.xlsx" />
+    <Content Include="datasets\D20_DATASET.xlsx" />
+    <Content Include="datasets\D21_DATASET.xlsx" />
+    <Content Include="datasets\D22_DATASET.xlsx" />
+    <Content Include="datasets\D23_DATASET.xlsx" />
+    <Content Include="datasets\D24_DATASET.xlsx" />
+    <Content Include="datasets\D25_DATASET.xlsx" />
+    <Content Include="datasets\D26_DATASET.xlsx" />
+    <Content Include="datasets\D27_DATASET.xlsx" />
+    <Content Include="datasets\D28_DATASET.xlsx" />
+    <Content Include="datasets\D29_DATASET.xlsx" />
+    <Content Include="datasets\D2_DATASET.xlsx" />
+    <Content Include="datasets\D30_DATASET.xlsx" />
+    <Content Include="datasets\D3_DATASET.xlsx" />
+    <Content Include="datasets\D4_DATASET.xlsx" />
+    <Content Include="datasets\D5_DATASET.xlsx" />
+    <Content Include="datasets\D6_DATASET.xlsx" />
+    <Content Include="datasets\D7_DATASET.xlsx" />
+    <Content Include="datasets\D8_DATASET.xlsx" />
+    <Content Include="datasets\D9_DATASET.xlsx" />
+    <Content Include="datasets\DATASET_S_with_Class.xlsx" />
+    <Content Include="datasets\List malwares.xlsx" />
+    <Content Include="results\supervised\fr1\accuracy_fmeasure_fr1.xlsx" />
+    <Content Include="results\supervised\fr1\accuracy_fr1.png" />
+    <Content Include="results\supervised\fr1\fmeasure_fr1.png" />
+    <Content Include="results\supervised\fr2\accuracy_fmeasure_fr2.xlsx" />
+    <Content Include="results\supervised\fr2\accuracy_fr2.png" />
+    <Content Include="results\supervised\fr2\fmeasure_fr2.png" />
+    <Content Include="results\supervised\fr3\accuracy_fmeasure_fr3.xlsx" />
+    <Content Include="results\Total_Results.xlsx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
