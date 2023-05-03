@@ -80,20 +80,20 @@ def ULR(X, y):
 
 #Define Consistency subset evaluation function
 def consistency_subset_evaluation(X, y):
-    Z = X.shape[1]
-    ICNR = np.zeros(Z)
-    for i in range(Z):
-        A = X[:, i]
-        INC = 0
-        Z_i = 0
+    Z = X.shape[1]      #Z = number of features
+    ICNR = np.zeros(Z)  #ICNR = the inconsistency rate for each feature
+    for i in range(Z): 
+        A = X[:, i]     #A = the values of a single feature across all samples
+        INC = 0         #INC = the count of inconsistent samples for a single feature
+        Z_i = 0         #Z_i = the number of samples with the current feature value
         for j in range(len(A)):
-            # count the number of samples with the same feature value but different class label
+            #Count the number of samples with the same feature value but different class label
             A0 = np.sum(np.logical_and(A == A[j], y == 0))
             A1 = np.sum(np.logical_and(A == A[j], y == 1))
             if A1 < A0:
                 INC += A0 - A1
             Z_i += 1
-        # calculate inconsistency rate for the feature
+        #Calculate inconsistency rate for the feature
         ICNR[i] = INC / Z_i
     return ICNR
 
@@ -131,7 +131,7 @@ def feature_selecting(feature_selection_name, X, y):
         return X_new
     elif feature_selection_name == "FS2":
         ICNR = consistency_subset_evaluation(X, y)
-        # select top 20 features based on inconsistency rates
+        #Select top 20 features based on inconsistency rates
         top_k_features = np.argsort(ICNR)[:20]
         X_new = X[:, top_k_features]
         return X_new
