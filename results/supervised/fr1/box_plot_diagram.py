@@ -3,7 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Load data from Excel file
-df = pd.read_excel(f'D:\\uit\\BaoMatWeb\\MLDroid\\DroidFusion\\main\\supervised\\FR1\\results\\accuracy_fmeasure_fr1.xlsx', skiprows=1)
+df = pd.read_excel(f'D:\\uit\\BaoMatWeb\\MLDroid\\DroidFusion\\results\\supervised\\fr1\\fr1.xlsx', skiprows=1)
 print(df.columns)
 
 # set the columns for accuracy and f-measure

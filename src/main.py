@@ -10,7 +10,7 @@ while True:
         classifiers = ["SVM", "NB", "RF", "MLP", "LR", "BN", "AB", "DT", "KNN", "DNN"]
         classifier_name = classifiers[int(classifier_choice) - 1]
 
-        feature_selections = ["FR1", "FR2", "FR3", "FR4", "FR5", "FR6"]
+        feature_selections = ["FR1", "FR2", "FR3", "FR4", "FR5", "FR6", "FS1", "FS2", "FS3", "FS4"]
         feature_selection_name = feature_selections[int(feature_selection_choice) - 1]
 
         # Train model

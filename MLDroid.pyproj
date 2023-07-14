@@ -12,7 +12,7 @@
     <OutputPath>.</OutputPath>
     <Name>MLDroid</Name>
     <RootNamespace>DroidFusion</RootNamespace>
-    <InterpreterId>Global|VisualStudio|SuperEnvironment-64bit</InterpreterId>
+    <InterpreterId>Global|VisualStudio|SuperEnvironment</InterpreterId>
     <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -26,6 +26,7 @@
   <ItemGroup>
     <Compile Include="results\supervised\fr1\box_plot_diagram.py" />
     <Compile Include="results\supervised\fr2\box_plot_diagram.py" />
+    <Compile Include="src\box_plot_diagram.py" />
     <Compile Include="src\main.py" />
     <Compile Include="utils\classifier_menu.py" />
     <Compile Include="utils\dataset_loader.py" />
@@ -33,9 +34,6 @@
     <Compile Include="utils\feature_select.py" />
     <Compile Include="utils\model_train.py" />
     <Compile Include="utils\__init__.py" />
-  </ItemGroup>
-  <ItemGroup>
-    <InterpreterReference Include="Global|VisualStudio|SuperEnvironment-64bit" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="datasets\" />
@@ -88,6 +86,10 @@
     <Content Include="results\supervised\fr2\fmeasure_fr2.png" />
     <Content Include="results\supervised\fr3\accuracy_fmeasure_fr3.xlsx" />
     <Content Include="results\Total_Results.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|SuperEnvironment" />
+    <InterpreterReference Include="Global|VisualStudio|SuperEnvironment" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

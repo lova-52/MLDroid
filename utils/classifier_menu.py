@@ -27,6 +27,11 @@ def print_menu():
     print("4. FR4")
     print("5. FR5")
     print("6. FR6")
+    print("7. FS1")
+    print("8. FS2")
+    print("9. FS3")
+    print("10. FS4")
+
 
     feature_selection_choice = input("Enter your choice: ")
 
@@ -41,7 +46,7 @@ while True:
         classifiers = ["SVM", "NB", "RF", "MLP", "LR", "BN", "AB", "DT", "KNN", "DNN"]
         classifier_name = classifiers[int(classifier_choice) - 1]
 
-        feature_selections = ["FR1", "FR2", "FR3", "FR4", "FR5", "FR6"]
+        feature_selections = ["FR1", "FR2", "FR3", "FR4", "FR5", "FR6", "FS1", "FS2", "FS3", "FS4"]
         feature_selection_name = feature_selections[int(feature_selection_choice) - 1]
 
         # Train model

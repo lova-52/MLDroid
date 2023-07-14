@@ -1,35 +1,43 @@
+from logging import info
+from scikit_roughsets.rs_reduction import RoughSetsSelector
+
 from sklearn.decomposition import PCA
-from sklearn.feature_selection import SelectKBest, chi2, f_regression
-from sklearn.feature_selection import VarianceThreshold
+from sklearn.feature_selection import SelectKBest, chi2, f_regression, VarianceThreshold, mutual_info_classif
 from sklearn.linear_model import LogisticRegression
 
-import numpy as np
+from sklearn.feature_selection import SelectFromModel
 
+import numpy as np
+from itertools import chain, combinations
 #Define gain ratio function
 def gain_ratio(X, y):
-    n_features = X.shape[1]
     X = X.astype('int64')
+    n_instances = len(X)
+    n_classes = len(np.unique(y))
+
     # Calculate information entropy of class variable
     class_counts = np.bincount(y)
-    class_probs = class_counts / len(y)
-    entropy = -np.sum(class_probs * np.log2(class_probs))
+    class_probs = class_counts / n_instances
+    I_X = -np.sum(class_probs * np.log2(class_probs))
 
     # Calculate gain ratio for each feature
-    gain_ratios = np.zeros(n_features)
-    for i in range(n_features):
+    gain_ratios = np.zeros(X.shape[1])
+    for i in range(X.shape[1]):
         feature_values = X[:, i]
         # Calculate information entropy of feature
         value_counts = np.bincount(feature_values)
-        value_probs = value_counts / len(feature_values)
-        value_entropy = -np.sum(value_probs * np.log2(value_probs))
+        value_probs = value_counts / n_instances
+        E_Z = 0
+        for j in range(len(value_probs)):
+            subset_indices = np.where(feature_values == j)[0]
+            subset_class_counts = np.bincount(y[subset_indices], minlength=n_classes)
+            subset_class_probs = subset_class_counts / len(subset_indices)
+            subset_I_X = -np.sum(subset_class_probs * np.log2(subset_class_probs))
+            E_Z += subset_I_X * (len(subset_indices) / n_instances)
         # Calculate split information of feature
         split_info = -np.sum(value_probs * np.log2(value_probs))
         # Calculate information gain of feature
-        value_class_counts = np.apply_along_axis(lambda x: np.bincount(x, minlength=len(class_counts)), 0, [feature_values, y])
-        value_class_probs = value_class_counts / len(y)
-        value_entropy_class = -np.sum(value_class_probs * np.log2(value_class_probs), axis=1)
-        value_entropy_class_weighted = np.sum(value_probs * value_entropy_class)
-        information_gain = entropy - value_entropy_class_weighted
+        information_gain = I_X - E_Z
         # Calculate gain ratio of feature
         if split_info == 0:
             gain_ratios[i] = 0
@@ -37,35 +45,69 @@ def gain_ratio(X, y):
             gain_ratios[i] = information_gain / split_info
     return gain_ratios
 
-#Define Informain-gain function
-def information_gain(X, y):
-    n_features = X.shape[1]
-    X = X.astype('int64')
-    # Calculate information entropy of class variable
-    class_counts = np.bincount(y)
-    class_probs = class_counts / len(y)
-    entropy = -np.sum(class_probs * np.log2(class_probs))
-
-    # Calculate information gain for each feature
-    information_gains = np.zeros(n_features)
-    for i in range(n_features):
-        feature_values = X[:, i]
-        # Calculate information entropy of feature
-        value_counts = np.bincount(feature_values)
-        value_probs = value_counts / len(feature_values)
-        value_entropy = -np.sum(value_probs * np.log2(value_probs))
-        # Calculate information gain of feature
-        value_class_counts = np.apply_along_axis(lambda x: np.bincount(x, minlength=len(class_counts)), 0, [feature_values, y])
-        value_class_probs = value_class_counts / len(y)
-        value_entropy_class = -np.sum(value_class_probs * np.log2(value_class_probs), axis=1)
-        value_entropy_class_weighted = np.sum(value_probs * value_entropy_class)
-        information_gain = entropy - value_entropy_class_weighted
-        # Add information gain of feature
-        information_gains[i] = information_gain
-
-    # Sort features by information gain
-    feature_indices = np.argsort(information_gains)[::-1]
-    return feature_indices
+#Define OneR function
+def OneR(X, y, k=4):
+    # Get the number of samples and features
+    n_samples, n_features = X.shape
+    
+    # Get the unique values in the feature matrix
+    possible_thresholds = np.unique(X)
+    
+    # Initialize the list of selected features and best accuracy
+    selected_features = []
+    best_accuracy = 0
+    
+    # Loop over the desired number of selected features
+    for _ in range(k):
+        # Initialize the best feature and threshold for this iteration
+        best_feature = None
+        best_threshold = None
+        
+        # Loop over each feature
+        for i in range(n_features):
+            # Skip if the feature has already been selected
+            if i in selected_features:
+                continue
+                
+            # Get the feature values for this feature
+            feature_values = X[:, i]
+            
+            # Loop over each unique value as a possible threshold
+            for threshold in possible_thresholds:
+                # Split the samples into left and right based on threshold
+                left_idxs = feature_values <= threshold
+                right_idxs = feature_values > threshold
+                left_labels = y[left_idxs]
+                right_labels = y[right_idxs]
+                
+                # Skip if either left or right set is empty
+                if len(left_labels) == 0 or len(right_labels) == 0:
+                    continue
+                
+                # Calculate the counts of each label in the left and right sets
+                left_counts = np.bincount(left_labels)
+                right_counts = np.bincount(right_labels)
+                
+                # Get the most frequent label in the left and right sets
+                left_prediction = np.argmax(left_counts)
+                right_prediction = np.argmax(right_counts)
+                
+                # Calculate the accuracy of this split
+                accuracy = (left_counts[left_prediction] + right_counts[right_prediction]) / n_samples
+                
+                # Update the best feature and threshold if accuracy is higher
+                if accuracy > best_accuracy:
+                    best_accuracy = accuracy
+                    best_feature = i
+                    best_threshold = threshold
+                    
+        # Add the best feature to the selected features list
+        if best_feature is not None:
+            selected_features.append(best_feature)
+        else:
+            break
+                
+    return selected_features
 
 # Define Univariate Logistic Regression ULR function
 def ULR(X, y):
@@ -75,6 +117,7 @@ def ULR(X, y):
     pvals = clf.predict_proba(X)[:, 1]
     features = list(range(X.shape[1]))
     coef_pval_vals = list(zip(features, coefs, pvals))
+    coef_pval_vals = [x for x in coef_pval_vals if x[1] > 0 and x[2] < 0.05]
     coef_pval_vals.sort(key=lambda x: abs(x[1]), reverse=True)
     return coef_pval_vals
 
@@ -97,45 +140,115 @@ def consistency_subset_evaluation(X, y):
         ICNR[i] = INC / Z_i
     return ICNR
 
+def filtered_subset_evaluation(X, y):
+    # Apply an arbitrary filtering approach
+    selector = VarianceThreshold(threshold=0.1)
+    X_filtered = selector.fit_transform(X)
+    
+    # Train a logistic regression model and evaluate consistency
+    clf = LogisticRegression()
+    clf.fit(X_filtered, y)
+    y_pred = clf.predict(X_filtered)
+    consistency_rate = sum(y_pred == y) / len(y)
+    
+    # Select the subset of features with high consistency rate
+    selector = SelectFromModel(clf, prefit=True, threshold=consistency_rate)
+    X_new = selector.transform(X_filtered)
+    
+    return X_new
+
+def rough_set_analysis(X, y):
+    # Convert input features X to binary matrix
+    binary_X = np.where(X > 0, 1, 0)
+    print(binary_X)
+
+    # Define function to calculate Information System
+    def calculate_information_system_A(binary_X):
+        features = binary_X.shape[1]
+        combinations_list = combinations(range(features), r=features+1)
+        information_system = {}
+        for combination in combinations_list:
+            rows = np.all(binary_X[:, combination], axis=1)
+            classification = y[rows]
+            information_system[tuple(combination)] = classification
+        return information_system
+
+    # Define function to calculate upper and lower approximations
+    def calculate_approximations_A(information_system, binary_X):
+        approximations = {}
+        for feature_set, classification in information_system.items():
+            rows = np.all(binary_X[:, feature_set], axis=1)
+            upper_approximation = y[np.all(y[rows] == y[:, None], axis=0)]
+            lower_approximation = y[np.any(y[rows] == y[:, None], axis=0)]
+            approximations[feature_set] = (upper_approximation, lower_approximation)
+        return approximations
+
+    # Define function to calculate reduced set of features
+    def calculate_reduced_attributes_A(approximations):
+        reduced_attributes = []
+        for feature_set, (upper, lower) in approximations.items():
+            if np.array_equal(upper, lower):
+                reduced_attributes.append(feature_set)
+        return reduced_attributes
+
+    # Calculate Information System
+    information_system = calculate_information_system_A(binary_X)
+    print(information_system)
+    # Calculate upper and lower approximations
+    approximations = calculate_approximations_A(information_system, binary_X)
+
+    # Calculate reduced set of features
+    reduced_features = calculate_reduced_attributes_A(approximations)
+
+    # Return reduced set of features
+    return reduced_features
 #Define feature selecting function
 def feature_selecting(feature_selection_name, X, y):
-    if feature_selection_name == "FR1":
-        selector = SelectKBest(chi2, k = 20)
-        X_new = selector.fit_transform(X, y)
-        return X_new
-    elif feature_selection_name == "FR2":
-        selector = SelectKBest(gain_ratio, k=20)
-        X_new = selector.fit_transform(X, y)
-        return X_new
-    elif feature_selection_name == "FR3":
-        selector = VarianceThreshold(threshold=0.1)
-        X_new = selector.fit_transform(X)
-        return X_new
-    elif feature_selection_name == "FR4":
-        feature_indices = information_gain(X, y)
-        X_new = X[:, feature_indices[:20]]
-        return X_new
-    elif feature_selection_name == "FR5":
-        ranked_features = ULR(X, y)
-        k = 20 #Select top 20 features
-        top_k_features = [x[0] for x in ranked_features[:k]]
-        X_new = X[:, top_k_features]
-        return X_new
-    elif feature_selection_name == "FR6":
-        pca = PCA(n_components=20)
-        X_new = pca.fit_transform(X)
-        return X_new
-    elif feature_selection_name == "FS1":
-        selector = SelectKBest(score_func=f_regression, k=20)
-        X_new = selector.fit_transform(X, y)
-        return X_new
-    elif feature_selection_name == "FS2":
-        ICNR = consistency_subset_evaluation(X, y)
-        #Select top 20 features based on inconsistency rates
-        top_k_features = np.argsort(ICNR)[:20]
-        X_new = X[:, top_k_features]
-        return X_new
-    else:
-        raise ValueError(f"Invalid feature selection method: {feature_selection_name}")
+    try:
+        if feature_selection_name == "FR1":
+            selector = SelectKBest(chi2, k = 4)
+            X_new = selector.fit_transform(X, y)
+            return X_new
+        elif feature_selection_name == "FR2":
+            selector = SelectKBest(gain_ratio, k = 4)
+            X_new = selector.fit_transform(X, y)
+            return X_new
+        elif feature_selection_name == "FR3":
+            selected_feature_indices = OneR(X, y, k=4)
+            X_new = X[:, selected_feature_indices]
+            return X_new
+        elif feature_selection_name == "FR4":
+            selector = SelectKBest(mutual_info_classif, k = 4)
+            X_new = selector.fit_transform(X, y)
+            return X_new
+        elif feature_selection_name == "FR5":
+            X_new = ULR(X, y)
+            return X_new
+        elif feature_selection_name == "FR6":
+            pca = PCA(n_components=4)
+            X_new = pca.fit_transform(X)
+            return X_new
+        elif feature_selection_name == "FS1":
+            selector = SelectKBest(score_func=f_regression, k=4)
+            X_new = selector.fit_transform(X, y)
+            return X_new
+        elif feature_selection_name == "FS2":
+            ICNR = consistency_subset_evaluation(X, y)  
+            top_k_features = np.argsort(ICNR)[:4]
+            X_new = X[:, top_k_features]
+            return X_new
+        elif feature_selection_name == "FS3":
+            X_new = consistency_subset_evaluation(X, y)
+            return X_new
+        elif feature_selection_name == "FS4":            
+            reduced_features = rough_set_analysis(X, y)
+            X_new = X[:, reduced_features]
+            return X
+        else:
+            raise ValueError(f"Invalid feature selection method: {feature_selection_name}")
+    except ValueError as e:
+        print(e)
+        return None
+
 
 

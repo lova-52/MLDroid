@@ -14,7 +14,10 @@ def data_processing(data):
     imputer = SimpleImputer(strategy='mean')
     X = data.drop('Class', axis=1)
     X = imputer.fit_transform(X)
-    
+
+    return X
+
+def min_max_normalize(X):
     # Apply min-max normalization to the selected features
     scaler = MinMaxScaler()
     X_new = scaler.fit_transform(X)

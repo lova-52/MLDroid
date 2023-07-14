@@ -43,14 +43,17 @@ def load_dataset(dataset_file):
     #Get the current working directory
     cwd = os.getcwd()
 
-    #Define the relative path to the dataset folder and file name
-    relative_path = 'datasets\\' + dataset_file
+    #Define the relative path to the dataset folder and file name using string formatting
+    relative_path = 'datasets\\{}'.format(dataset_file)
 
     #Join the current working directory with the relative path to get the full path to the file
     file_path = os.path.join(cwd, relative_path)
 
-    #Load the dataset           
-    data = pd.read_excel(f'{file_path}')
-    print("Loading ", {dataset_file})
-
-    return data
+    try:
+        #Load the dataset
+        data = pd.read_excel(file_path)
+        print("Loading", dataset_file)
+        return data
+    except Exception as e:
+        print(f'Error loading {dataset_file}: {str(e)}')
+        return None

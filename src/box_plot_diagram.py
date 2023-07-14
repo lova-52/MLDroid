@@ -3,8 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Load data from Excel file
-df = pd.read_excel(f'C:\\Repo\\MLDroid\\DroidFusion\\results\\supervised\\fr2\\fr2.xlsx', skiprows=1)
-print(df.columns)
+df = pd.read_excel(f'C:\\Repo\\MLDroid\\DroidFusion\\results\\supervised\\fs4\\fs4.xlsx', skiprows=1)
 
 # set the columns for accuracy and f-measure
 acc_cols = ['SVM', 'NB', 'RF', 'MLP', 'LR', 'BN', 'AB', 'DT', 'KNN', 'DNN']
@@ -13,8 +12,8 @@ fme_cols = ['SVM.1', 'NB.1', 'RF.1', 'MLP.1', 'LR.1', 'BN.1', 'AB.1', 'DT.1', 'K
 # create separate plots for accuracy and f-measure box plots
 fig1, ax1 = plt.subplots(figsize=(10, 5))
 fig2, ax2 = plt.subplots(figsize=(10, 5))
-ax1.set_ylim([60, 100])
-ax2.set_ylim([0.6, 1])
+ax1.set_ylim([70, 100])
+ax2.set_ylim([0.7, 1])
 
 # plot accuracy box plot
 sns.boxplot(data=df[acc_cols], ax=ax1)
